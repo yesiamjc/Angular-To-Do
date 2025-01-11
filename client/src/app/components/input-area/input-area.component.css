@@ -1,0 +1,42 @@
+.inputArea{
+    width:60vw;
+    height:20vh;
+    border: 1px solid purple;
+    border-radius: 10px;
+    color: purple;
+    padding: 20px;
+    margin: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.inputAreaHeading{
+    margin: 10px;
+}
+
+.inputAreaInput{
+    padding: 5px 10px;
+    margin: 10px;
+}
+
+.inputAreaInput:focus{
+    outline: none;
+}
+
+.inputAreaInput::placeholder{
+    color: purple;
+}
+
+.addTaskButton{
+    width: 100px;
+    padding: 5px 10px;
+    margin: 10px;
+    border: none;
+    border: 1px solid purple;
+    border-radius: 5px;
+    color: purple;
+    cursor: pointer;
+    align-self: end;
+}

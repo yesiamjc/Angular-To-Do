@@ -1,17 +1,1 @@
-<div>
-  <form (ngSubmit)="addTask()">
-    <input type="text" [(ngModel)]="newTask" name="task" placeholder="Add a new task" required>
-    <button type="submit">Add Task</button>
-  </form>
-</div>
-
-<div *ngIf="tasks.length === 0">
-  <p>No tasks as of now.</p>
-</div>
-<div *ngIf="tasks.length > 0">
-  <ul>
-    <li *ngFor="let task of tasks">
-      <app-task [task]="task" (delete)="deleteTask(task.id)" (update)="updateTask(task)"></app-task>
-    </li>
-  </ul>
-</div>
+<p>task-list works!</p>
