@@ -1,5 +1,5 @@
 <div class="inputArea">
     <h2 class="inputAreaHeading">Add Task</h2>
-    <input type="text" name="tinput" class="inputAreaInput" placeholder="Add Task Here" >
-    <button type="submit" class="addTaskButton">Add Task</button>
-</div>
+    <input type="text" [(ngModel)]="newTask" name="tinput" class="inputAreaInput" placeholder="Add Task Here" required>
+    <button type="submit" class="addTaskButton" (click)="addTask()">Add Task</button>
+  </div>

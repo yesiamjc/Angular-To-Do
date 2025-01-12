@@ -1,1 +1,4 @@
-<p>task works!</p>
+<div>
+    <input type="text" [(ngModel)]="task.myTask" (blur)="updateTask()" />
+    <button (click)="deleteTask()">Delete</button>
+  </div>

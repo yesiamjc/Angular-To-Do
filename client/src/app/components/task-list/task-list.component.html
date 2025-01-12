@@ -1,1 +1,13 @@
-<p>task-list works!</p>
+<div>
+    <h2>All Tasks</h2>
+    <div *ngIf="tasks.length === 0">
+      <p>No tasks as of now.</p>
+    </div>
+    <div *ngIf="tasks.length > 0">
+      <ul>
+        <li *ngFor="let task of tasks">
+          <app-task [task]="task" (delete)="deleteTask(task.id)" (update)="updateTask(task)"></app-task>
+        </li>
+      </ul>
+    </div>
+  </div>
