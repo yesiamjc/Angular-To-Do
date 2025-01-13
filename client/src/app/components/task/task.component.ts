@@ -15,13 +15,20 @@ export class TaskComponent {
   @Output() delete = new EventEmitter<string>();
   @Output() update = new EventEmitter<Task>();
 
+  isEditing = false;
+
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+  }
+
   deleteTask(): void {
     if (this.task.id) {
       this.delete.emit(this.task.id);
     }
   }
 
-  updateTask(): void {
+  saveTask(): void {
     this.update.emit(this.task);
+    this.toggleEdit();
   }
 }

@@ -1,0 +1,23 @@
+.taskListCompHeading {
+  display: block;
+  text-align: center;
+  color: purple;
+}
+
+.taskListCompNoTask {
+  width: 60vw;
+  height: 40px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.taskListCompNoTaskPara{
+    color: purple;
+}
+
+.taskListCompIfTaskListsList {
+  list-style-type: none;
+}

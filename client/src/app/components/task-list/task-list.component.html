@@ -1,12 +1,12 @@
-<div>
-    <h2>All Tasks</h2>
-    <div *ngIf="tasks.length === 0">
-      <p>No tasks as of now.</p>
-    </div>
-    <div *ngIf="tasks.length > 0">
-      <ul>
-        <li *ngFor="let task of tasks">
-          <app-task [task]="task" (delete)="deleteTask(task.id)" (update)="updateTask(task)"></app-task>
+<div class="taskListComp">
+    <h2 class="taskListCompHeading" >All Tasks</h2>
+    <div class="taskListCompNoTask" *ngIf="tasks.length === 0">
+      <p class="taskListCompNoTaskPara" >No tasks as of now. Add one now</p>
+    </div >
+    <div class="taskListCompIfTask" *ngIf="tasks.length > 0">
+      <ul class="taskListCompIfTaskLists">
+        <li  class="taskListCompIfTaskListsList" *ngFor="let task of tasks">
+          <app-task [task]="task" (delete)="deleteTask($event)" (update)="updateTask($event)"></app-task>
         </li>
       </ul>
     </div>

@@ -1,4 +1,16 @@
-<div>
-    <input type="text" [(ngModel)]="task.myTask" (blur)="updateTask()" />
-    <button (click)="deleteTask()">Delete</button>
-  </div>
+<div class="taskComp">
+    <div *ngIf="!isEditing">
+        <p class="taskCompTask">{{ task.myTask }}</p>
+        <div class="taskCompButtons">
+            <button class="taskCompEditButton" (click)="toggleEdit()">Edit</button>
+            <button class="taskCompDeleteButton" (click)="deleteTask()">Delete</button>
+        </div>
+    </div>
+    <div *ngIf="isEditing">
+        <input type="text" [(ngModel)]="task.myTask" class="taskCompInput" />
+        <div class="taskCompButtons">
+            <button class="taskCompSaveButton" (click)="saveTask()">Save</button>
+            <button class="taskCompCancelButton" (click)="toggleEdit()">Cancel</button>
+        </div>
+    </div>
+</div> 

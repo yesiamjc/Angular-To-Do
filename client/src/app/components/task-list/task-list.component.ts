@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServiceService, Task } from '../../services/service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { TaskComponent } from '../task/task.component';
 
 @Component({
@@ -9,7 +10,7 @@ import { TaskComponent } from '../task/task.component';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, TaskComponent]
+  imports: [CommonModule, FormsModule, HttpClientModule, TaskComponent]
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
@@ -22,12 +23,10 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  deleteTask(id: string | undefined): void {
-    if (id) {
-      this.taskService.deleteTask(id).subscribe(() => {
-        this.tasks = this.tasks.filter(task => task.id !== id);
-      });
-    }
+  deleteTask(id: string): void {
+    this.taskService.deleteTask(id).subscribe(() => {
+      this.tasks = this.tasks.filter(task => task.id !== id);
+    });
   }
 
   updateTask(task: Task): void {

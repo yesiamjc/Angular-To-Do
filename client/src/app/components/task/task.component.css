@@ -1,0 +1,93 @@
+.taskComp{
+    width: 50vw;
+    min-height: 40px;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid purple;
+    border-radius: 10px;
+    color: purple;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.taskCompButtons{
+    display: flex;
+    justify-self: end;
+}
+
+.taskCompEditButton{
+    width: 100px;
+
+    padding: 5px 10px;
+    margin: 10px;
+    border: 1px solid purple;
+    border-radius: 5px;
+    color: purple;
+    background-color: white;
+    cursor: pointer;
+}
+
+.taskCompDeleteButton{
+    width: 100px;
+
+    padding: 5px 10px;
+    margin: 10px;
+    border: 1px solid purple;
+    border-radius: 5px;
+    color: purple;
+    background-color: white;
+    cursor: pointer;
+}
+
+.taskCompSaveButton{
+    width: 100px;
+
+    padding: 5px 10px;
+    margin: 10px;
+    border: 1px solid purple;
+    border-radius: 5px;
+    color: purple;
+    background-color: white;
+    cursor: pointer;
+}
+
+.taskCompCancelButton{
+    width: 100px;
+
+    padding: 5px 10px;
+    margin: 10px;
+    border: 1px solid purple;
+    border-radius: 5px;
+    color: purple;
+    background-color: white;
+    cursor: pointer;
+}
+
+.taskCompInput{
+    width: 95%;
+    padding: 5px 10px;
+    margin: 10px;
+    color: purple;
+    border: 1px solid purple;
+    border-radius: 5px;
+}
+
+.taskCompInput:focus{
+    outline: none;
+}
+
+@media screen and (max-width:480px) {
+    .taskCompInput{
+     width:85%;
+    }
+
+    .taskComp{
+     width: 70vw;
+    }
+
+    .taskCompButtons{
+        display: flex;
+        align-self: center;
+    }
+}
