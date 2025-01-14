@@ -1,6 +1,9 @@
 <div class="taskComp">
     <div *ngIf="!isEditing">
-        <p class="taskCompTask">{{ task.myTask }}</p>
+        <div class="taskDetails">
+            <p class="taskCompTask">{{ task.myTask }}</p>
+            <p class="taskCompTime">{{ getFormattedTime() }}</p>
+        </div>
         <div class="taskCompButtons">
             <button class="taskCompEditButton" (click)="toggleEdit()">Edit</button>
             <button class="taskCompDeleteButton" (click)="deleteTask()">Delete</button>
@@ -13,4 +16,4 @@
             <button class="taskCompCancelButton" (click)="toggleEdit()">Cancel</button>
         </div>
     </div>
-</div> 
+</div>

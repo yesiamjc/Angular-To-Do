@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 
 export interface Task {
   id?: string;
-  _id?: string;  // Add this for MongoDB ID
+  _id?: string;  
   myTask: string;
   createdAt?: string;
   updatedAt?: string;
@@ -20,8 +20,10 @@ interface TaskResponse {
 @Injectable({
   providedIn: 'root',
 })
+
+
 export class ServiceService {
-  private apiUrl = `${environment.apiUrl}/tasks`; // Fixed template literal
+  private apiUrl = `${environment.apiUrl}/tasks`; 
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +33,7 @@ export class ServiceService {
     );
   }
   getTaskById(id: string): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${id}`); // Fixed template literal
+    return this.http.get<Task>(`${this.apiUrl}/${id}`); 
   }
 
   addTask(task: Task): Observable<Task> {
@@ -39,10 +41,10 @@ export class ServiceService {
   }
 
   updateTask(id: string, task: Task): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/${id}`, task); // Fixed template literal
+    return this.http.patch<Task>(`${this.apiUrl}/${id}`, task); 
   }
 
   deleteTask(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`); // Fixed template literal
+    return this.http.delete<void>(`${this.apiUrl}/${id}`); 
   }
 }

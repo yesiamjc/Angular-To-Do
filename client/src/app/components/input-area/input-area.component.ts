@@ -21,7 +21,6 @@ export class InputAreaComponent {
       const task: Task = { myTask: this.newTask.trim() };
       this.taskService.addTask(task).subscribe(() => {
         this.newTask = '';
-        // Optionally, you can emit an event to refresh the task list
       });
     }
   }

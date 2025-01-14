@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../../services/service.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-task',
@@ -11,7 +12,7 @@ import { Task } from '../../services/service.service';
   imports: [CommonModule, FormsModule]
 })
 export class TaskComponent {
-  @Input() task: any;
+  @Input() task!: Task;  
   @Output() delete = new EventEmitter<string>();
   @Output() update = new EventEmitter<Task>();
 
@@ -22,13 +23,16 @@ export class TaskComponent {
   }
 
   deleteTask(): void {
-    if (this.task.id) {
-      this.delete.emit(this.task.id);
+    if (this.task._id) {  
+      this.delete.emit(this.task._id);
     }
   }
 
   saveTask(): void {
     this.update.emit(this.task);
     this.toggleEdit();
+  }
+  getFormattedTime(): string {
+    return moment(this.task.updatedAt).fromNow();
   }
 }

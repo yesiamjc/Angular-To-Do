@@ -18,25 +18,34 @@ export class TaskListComponent implements OnInit {
   constructor(private taskService: ServiceService) {}
 
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe((data: Task[]) => {
-      this.tasks = data;
+    this.taskService.getTasks().subscribe({
+      next: (data: Task[]) => {
+        this.tasks = data;
+      },
+      error: (error) => console.error('Error fetching tasks:', error)
     });
   }
 
   deleteTask(id: string): void {
-    this.taskService.deleteTask(id).subscribe(() => {
-      this.tasks = this.tasks.filter(task => task.id !== id);
+    this.taskService.deleteTask(id).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter(task => task._id !== id);  
+      },
+      error: (error) => console.error('Error deleting task:', error)
     });
   }
 
-  updateTask(task: Task): void {
-    if (task.id) {
-      this.taskService.updateTask(task.id, task).subscribe(updatedTask => {
-        const index = this.tasks.findIndex(t => t.id === task.id);
-        if (index !== -1) {
-          this.tasks[index] = updatedTask;
-        }
-      });
-    }
+updateTask(task: Task): void {
+  if (task._id) {
+    this.taskService.updateTask(task._id, task).subscribe({
+      next: () => {
+        this.taskService.getTasks().subscribe(tasks => {
+          this.tasks = tasks;
+        });
+      },
+      error: (error) => console.error('Error updating task:', error)
+    });
   }
+}
+  
 }

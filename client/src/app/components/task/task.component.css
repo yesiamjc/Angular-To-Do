@@ -11,6 +11,17 @@
     flex-direction: column;
 }
 
+.taskDetails{
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.taskCompTime{
+    align-self: end;
+}
+
 .taskCompButtons{
     display: flex;
     justify-self: end;
