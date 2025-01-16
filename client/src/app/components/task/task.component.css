@@ -24,7 +24,7 @@
 
 .taskCompButtons{
     display: flex;
-    justify-self: end;
+    justify-content: end;
 }
 
 .taskCompEditButton{

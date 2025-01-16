@@ -1,13 +1,22 @@
 <div class="taskListComp">
-    <h2 class="taskListCompHeading" >All Tasks</h2>
-    <div class="taskListCompNoTask" *ngIf="tasks.length === 0">
-      <p class="taskListCompNoTaskPara" >No tasks as of now. Add one now</p>
-    </div >
-    <div class="taskListCompIfTask" *ngIf="tasks.length > 0">
+  <h2 class="taskListCompHeading">All Tasks</h2>
+  @if (tasks().length === 0) {
+    <div class="taskListCompNoTask">
+      <p class="taskListCompNoTaskPara">No tasks as of now. Add one now</p>
+    </div>
+  } @else {
+    <div class="taskListCompIfTask">
       <ul class="taskListCompIfTaskLists">
-        <li  class="taskListCompIfTaskListsList" *ngFor="let task of tasks">
-          <app-task [task]="task" (delete)="deleteTask($event)" (update)="updateTask($event)"></app-task>
-        </li>
+        @for (task of tasks(); track task._id) {
+          <li class="taskListCompIfTaskListsList">
+            <app-task 
+              [task]="task" 
+              (deleteTask)="deleteTask($event)" 
+              (updateTask)="updateTask($event)">
+            </app-task>
+          </li>
+        }
       </ul>
     </div>
-  </div>
+  }
+</div>

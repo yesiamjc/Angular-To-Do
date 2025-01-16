@@ -1,19 +1,20 @@
 <div class="taskComp">
-    <div *ngIf="!isEditing">
-        <div class="taskDetails">
-            <p class="taskCompTask">{{ task.myTask }}</p>
-            <p class="taskCompTime">{{ getFormattedTime() }}</p>
-        </div>
-        <div class="taskCompButtons">
-            <button class="taskCompEditButton" (click)="toggleEdit()">Edit</button>
-            <button class="taskCompDeleteButton" (click)="deleteTask()">Delete</button>
-        </div>
+  @if (!isEditing()) {
+    <div class="taskDetails">
+      <p class="taskCompTask">{{ task().myTask }}</p>
+      <p class="taskCompTime">{{ getFormattedTime() }}</p>
     </div>
-    <div *ngIf="isEditing">
-        <input type="text" [(ngModel)]="task.myTask" class="taskCompInput" />
-        <div class="taskCompButtons">
-            <button class="taskCompSaveButton" (click)="saveTask()">Save</button>
-            <button class="taskCompCancelButton" (click)="toggleEdit()">Cancel</button>
-        </div>
+    <div class="taskCompButtons">
+      <button class="taskCompEditButton" (click)="toggleEdit()">Edit</button>
+      <button class="taskCompDeleteButton" (click)="onDelete()">Delete</button>
     </div>
+  } @else {
+    <div>
+      <input type="text" [(ngModel)]="task().myTask" class="taskCompInput" />
+      <div class="taskCompButtons">
+        <button class="taskCompSaveButton" (click)="saveTask()">Save</button>
+        <button class="taskCompCancelButton" (click)="toggleEdit()">Cancel</button>
+      </div>
+    </div>
+  }
 </div>

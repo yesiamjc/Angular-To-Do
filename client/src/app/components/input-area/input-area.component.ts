@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { ServiceService, Task } from '../../services/service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,15 +12,14 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [CommonModule, FormsModule, HttpClientModule]
 })
 export class InputAreaComponent {
-  newTask: string = '';
-
-  constructor(private taskService: ServiceService) {}
+  private taskService = inject(ServiceService);
+  newTask = signal('');
 
   addTask(): void {
-    if (this.newTask.trim()) {
-      const task: Task = { myTask: this.newTask.trim() };
+    if (this.newTask().trim()) {
+      const task: Task = { myTask: this.newTask().trim() };
       this.taskService.addTask(task).subscribe(() => {
-        this.newTask = '';
+        this.newTask.set('');
       });
     }
   }

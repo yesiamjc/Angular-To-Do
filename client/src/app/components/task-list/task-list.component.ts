@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { ServiceService, Task } from '../../services/service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,14 +13,13 @@ import { TaskComponent } from '../task/task.component';
   imports: [CommonModule, FormsModule, HttpClientModule, TaskComponent]
 })
 export class TaskListComponent implements OnInit {
-  tasks: Task[] = [];
-
-  constructor(private taskService: ServiceService) {}
+  private taskService = inject(ServiceService);
+  tasks = signal<Task[]>([]);
 
   ngOnInit(): void {
     this.taskService.getTasks().subscribe({
       next: (data: Task[]) => {
-        this.tasks = data;
+        this.tasks.set(data);
       },
       error: (error) => console.error('Error fetching tasks:', error)
     });
@@ -29,23 +28,22 @@ export class TaskListComponent implements OnInit {
   deleteTask(id: string): void {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
-        this.tasks = this.tasks.filter(task => task._id !== id);  
+        this.tasks.update(tasks => tasks.filter(task => task._id !== id));
       },
       error: (error) => console.error('Error deleting task:', error)
     });
   }
 
-updateTask(task: Task): void {
-  if (task._id) {
-    this.taskService.updateTask(task._id, task).subscribe({
-      next: () => {
-        this.taskService.getTasks().subscribe(tasks => {
-          this.tasks = tasks;
-        });
-      },
-      error: (error) => console.error('Error updating task:', error)
-    });
+  updateTask(task: Task): void {
+    if (task._id) {
+      this.taskService.updateTask(task._id, task).subscribe({
+        next: () => {
+          this.taskService.getTasks().subscribe(tasks => {
+            this.tasks.set(tasks);
+          });
+        },
+        error: (error) => console.error('Error updating task:', error)
+      });
+    }
   }
-}
-  
 }
