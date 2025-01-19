@@ -21,13 +21,10 @@ const authSchema=new mongoose.Schema({
             ref:'tasks'
         }
     ],
-    userRefreshToken:{
-        type:String
-    },
     userLoggedIn:{
         type:Boolean,
         default:false
     }
 }, { timestamps:true })
 
-export const auths=mongoose.model("auths", authSchema)
+export const users=mongoose.model("users", authSchema)

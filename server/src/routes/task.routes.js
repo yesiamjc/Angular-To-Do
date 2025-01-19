@@ -5,18 +5,19 @@ import {
     deleteTask,
     updateTask
 } from '../controllers/task.controllers.js'
+import { verifyToken } from '../middlewares/auth.middlewares.js'
 import express from 'express'
 
 const router=express.Router()
 
-router.post('/', postTask)
+router.post('/', verifyToken, postTask)
 
-router.get('/', getTasks)
+router.get('/', verifyToken, getTasks)
 
-router.get('/:id', getTask)
+router.get('/:id', verifyToken, getTask)
 
-router.delete('/:id', deleteTask)
+router.delete('/:id', verifyToken, deleteTask)
 
-router.patch('/:id', updateTask)
+router.patch('/:id', verifyToken, updateTask)
 
 export default router
