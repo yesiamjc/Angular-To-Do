@@ -24,6 +24,10 @@ const authSchema=new mongoose.Schema({
     userLoggedIn:{
         type:Boolean,
         default:false
+    },
+    userRole:{
+        type:String,
+        default: "user"
     }
 }, { timestamps:true })
 

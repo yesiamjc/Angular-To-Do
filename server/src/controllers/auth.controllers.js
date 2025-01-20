@@ -66,7 +66,7 @@ export const signInUser=async(req, res)=>{
         else{
             const token=generateToken(exist._id)
 
-            exist.isLoggedIn=true
+            exist.userLoggedIn=true
             await exist.save()
 
             res.cookie("token", token, {
@@ -94,7 +94,7 @@ export const signOutUser=async(req, res)=>{
     if(!auth)
         return res.status(400).json({error: "User not found"})
 
-    auth.isLoggedIn=false
+    auth.userLoggedIn=false
     await auth.save()
 
     res.clearCookie("token")

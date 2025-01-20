@@ -1,3 +1,11 @@
 <nav class="navbar">
     <h1 class="navbarHeading">To Do App</h1>
+    <a routerLink="/">Home</a>
+    @if (!authService.isAuthenticated()) {
+        <a routerLink="/sign-in">Sign In</a>
+        <a routerLink="/sign-up">Sign Up</a>
+    }
+    @if (authService.isAuthenticated()) {
+        <button (click)="signOut()">Sign Out</button>
+    }
 </nav>
