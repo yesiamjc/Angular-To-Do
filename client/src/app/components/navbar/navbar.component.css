@@ -10,3 +10,25 @@
 .navbarHeading{
     color: white;
 }
+
+.authNav{
+    width: 45vw;
+    display: flex;
+    justify-content: end;
+}
+
+.authNavButton{
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.list{
+    text-decoration: none;
+    background-color: white;
+    color: purple;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 20px;
+}

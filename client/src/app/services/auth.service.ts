@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/users`;
   isAuthenticated = signal<boolean>(false);
+  userName = signal<string>('');
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -25,6 +26,7 @@ export class AuthService {
           document.cookie = `token=${response.token}; path=/; max-age=7200`;
         }
         this.isAuthenticated.set(true);
+        this.fetchUserData();
         this.router.navigate(['/']);
       })
     );
@@ -35,6 +37,7 @@ export class AuthService {
       document.cookie = 'token=; path=/; max-age=0';
     }
     this.isAuthenticated.set(false);
+    this.userName.set('');
     this.router.navigate(['/sign-in']);
   }
 
@@ -42,11 +45,18 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me`);
   }
 
+  fetchUserData() {
+    this.http.get(`${this.apiUrl}/me`).subscribe((user: any) => {
+      this.userName.set(user.userName);
+    });
+  }
+
   checkAuthentication() {
     if (typeof document !== 'undefined') {
       const token = document.cookie.split('; ').find(row => row.startsWith('token='));
       if (token) {
         this.isAuthenticated.set(true);
+        this.fetchUserData();
       } else {
         this.isAuthenticated.set(false);
       }

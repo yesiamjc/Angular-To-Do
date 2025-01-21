@@ -1,0 +1,36 @@
+.signInInputForm{
+    width: 60vw;
+    height: 30vh;
+    padding: 20px;
+    margin: 20px;
+
+    display: flex;
+    flex-direction: column;
+    color: purple;
+    border: 1px solid purple;
+    border-radius: 20px;
+}
+
+.signInInputHeading{
+    align-self: center;
+}
+
+.signInInput{
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.signInInput:focus{
+    outline:none;
+}
+
+.signInInputBtn{
+    width: 150px;
+    padding: 5px 10px;
+    align-self: end;
+    border: none;
+    border: 1px solid purple;
+    background-color: white;
+    color: purple;
+    cursor: pointer;
+}

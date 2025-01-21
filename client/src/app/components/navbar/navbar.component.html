@@ -1,11 +1,15 @@
 <nav class="navbar">
     <h1 class="navbarHeading">To Do App</h1>
-    <a routerLink="/">Home</a>
     @if (!authService.isAuthenticated()) {
-        <a routerLink="/sign-in">Sign In</a>
-        <a routerLink="/sign-up">Sign Up</a>
+        <div class="authNav">
+        <a class="list" routerLink="/sign-in">Sign In</a>
+        <a class="list" routerLink="/sign-up">Sign Up</a>
+        </div>
     }
     @if (authService.isAuthenticated()) {
-        <button (click)="signOut()">Sign Out</button>
+        <div class="authNav">
+            <h3 class="authNavName">{{ authService.userName() }}</h3>
+            <button class="authNavButton" (click)="signOut()">Sign Out</button>
+        </div>
     }
 </nav>
