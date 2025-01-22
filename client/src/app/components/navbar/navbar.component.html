@@ -1,14 +1,17 @@
 <nav class="navbar">
     <h1 class="navbarHeading">To Do App</h1>
     @if (!authService.isAuthenticated()) {
-        <div class="authNav">
+       <div class="notAuth">
         <a class="list" routerLink="/sign-in">Sign In</a>
         <a class="list" routerLink="/sign-up">Sign Up</a>
-        </div>
+       </div>
     }
     @if (authService.isAuthenticated()) {
         <div class="authNav">
             <h3 class="authNavName">{{ authService.userName() }}</h3>
+            @if (authService.userRole() === 'admin') {
+                <a class="list" routerLink="/dashboard">Dashboard</a>
+            }
             <button class="authNavButton" (click)="signOut()">Sign Out</button>
         </div>
     }

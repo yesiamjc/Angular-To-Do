@@ -1,8 +1,8 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ServiceService, Task } from '../../services/service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { TaskComponent } from '../task/task.component';
 
 @Component({
@@ -13,37 +13,45 @@ import { TaskComponent } from '../task/task.component';
   imports: [CommonModule, FormsModule, HttpClientModule, TaskComponent]
 })
 export class TaskListComponent implements OnInit {
-  private taskService = inject(ServiceService);
   tasks = signal<Task[]>([]);
 
+  constructor(private taskService: ServiceService) {}
+
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe({
-      next: (data: Task[]) => {
-        this.tasks.set(data);
+    this.fetchTasks();
+  }
+
+  fetchTasks(): void {
+    this.taskService.getTasks().subscribe(
+      (data: Task[]) => {
+        this.tasks.set(data); 
       },
-      error: (error) => console.error('Error fetching tasks:', error)
-    });
+      (error: HttpErrorResponse) => {
+        console.error('Error fetching tasks:', error);
+      }
+    );
   }
 
   deleteTask(id: string): void {
-    this.taskService.deleteTask(id).subscribe({
-      next: () => {
-        this.tasks.update(tasks => tasks.filter(task => task._id !== id));
-      },
-      error: (error) => console.error('Error deleting task:', error)
+    this.taskService.deleteTask(id).subscribe(() => {
+      this.tasks.set(this.tasks().filter(task => task.id !== id));
     });
   }
 
   updateTask(task: Task): void {
-    if (task._id) {
-      this.taskService.updateTask(task._id, task).subscribe({
-        next: () => {
-          this.taskService.getTasks().subscribe(tasks => {
-            this.tasks.set(tasks);
-          });
-        },
-        error: (error) => console.error('Error updating task:', error)
+    if (task.id) {
+      this.taskService.updateTask(task.id, task).subscribe(updatedTask => {
+        const index = this.tasks().findIndex(t => t.id === task.id);
+        if (index !== -1) {
+          const updatedTasks = [...this.tasks()];
+          updatedTasks[index] = updatedTask;
+          this.tasks.set(updatedTasks);
+        }
       });
     }
+  }
+
+  onTaskAdded(newTask: Task): void {
+    this.tasks.set([...this.tasks(), newTask]);
   }
 }

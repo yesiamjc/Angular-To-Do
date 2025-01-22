@@ -18,7 +18,7 @@ export class SignUpComponent {
   constructor(private authService: AuthService) {}
 
   signUp() {
-    const user = { userName: this.userName(), email: this.email(), password: this.password() };
+    const user = { userName: this.userName(), userEmail: this.email(), userPassword: this.password() };
     this.authService.signUp(user).subscribe(() => {
       this.authService.signIn(user).subscribe();
     });

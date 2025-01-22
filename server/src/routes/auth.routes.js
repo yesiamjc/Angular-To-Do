@@ -3,7 +3,8 @@ import {
     signInUser,
     signOutUser,
     deleteUser,
-    currentUser
+    currentUser,
+    getAllUsers
 } from '../controllers/auth.controllers.js'
 import { verifyToken } from '../middlewares/auth.middlewares.js'
 import express from 'express'
@@ -18,6 +19,8 @@ authRoute.post('/signOut', verifyToken, signOutUser)
 
 authRoute.delete('/delete', verifyToken, deleteUser)
 
-authRoute.post('/me', verifyToken, currentUser)
+authRoute.get('/me', verifyToken, currentUser)
+
+authRoute.get('/allUsers', verifyToken, getAllUsers)
 
 export default authRoute

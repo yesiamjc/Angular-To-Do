@@ -22,7 +22,8 @@ export class TaskComponent {
   }
 
   onDelete(): void {
-    const taskId = this.task()._id;
+    const taskId = this.task().id;
+    
     if (taskId) {  
       this.deleteTask.emit(taskId);
     }

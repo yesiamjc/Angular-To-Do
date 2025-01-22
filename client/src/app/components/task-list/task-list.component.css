@@ -18,6 +18,11 @@
     color: purple;
 }
 
+.taskListCompIfTask{
+  display: flex;
+  justify-content: center;
+}
+
 .taskListCompIfTaskListsList {
   list-style-type: none;
 }

@@ -1,1 +1,23 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+    <h2>User Details</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>User Name</th>
+          <th>User Email</th>
+          <th>Number of Tasks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.userName }}</td>
+            <td>{{ user.userEmail }}</td>
+            <td>{{ user.userTasks.length }}</td>
+           
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>

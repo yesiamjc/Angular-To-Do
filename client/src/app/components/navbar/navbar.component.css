@@ -7,11 +7,22 @@
     align-items: center;
 }
 
+.authNavName{
+    color: white;
+    margin-right: 20px;
+}
+
 .navbarHeading{
     color: white;
 }
 
 .authNav{
+    width: 45vw;
+    display: flex;
+    justify-content: end;
+}
+
+.notAuth{
     width: 45vw;
     display: flex;
     justify-content: end;
