@@ -1,7 +1,7 @@
 import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Task } from '../../services/service.service';
+import { ServiceService, Task } from '../../services/service.service';
 import moment from 'moment';
 
 @Component({
@@ -16,13 +16,26 @@ export class TaskComponent {
   deleteTask = output<string>();
   updateTask = output<Task>();
   isEditing = signal(false);
+  editedTask = signal(''); 
+
+  constructor(private service: ServiceService) {}
+
+toggleTaskComplete(): void {
+  const currentTask = this.task();
+  const updatedTask = {
+    ...currentTask,
+    myTaskCompleted: !currentTask.myTaskCompleted
+  };
+  this.updateTask.emit(updatedTask);
+}
 
   toggleEdit(): void {
     this.isEditing.update(value => !value);
+    this.editedTask.set(this.task().myTask);
   }
 
   onDelete(): void {
-    const taskId = this.task().id;
+    const taskId = this.task()._id;
     
     if (taskId) {  
       this.deleteTask.emit(taskId);
@@ -30,9 +43,11 @@ export class TaskComponent {
   }
 
   saveTask(): void {
-    this.updateTask.emit(this.task());
+    const currentTask = this.task();
+    currentTask.myTask = this.editedTask(); 
+    this.updateTask.emit(currentTask);  // This just emits an event
     this.toggleEdit();
-  }
+}
 
   getFormattedTime(): string {
     return moment(this.task().updatedAt).fromNow();

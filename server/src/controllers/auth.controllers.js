@@ -105,14 +105,28 @@ export const signOutUser=async(req, res)=>{
 
 export const deleteUser=async(req, res)=>{
     const id=req.user.id
+    const { userEmail } =req.body
+    let role=""
 
     try {
-        await users.findByIdAndDelete(id)
-        res.clearCookie("token")
-        res.json({message:"User deleted successfully"})
-    } catch (error) {
+        const res=await users.findOne({_id:id}).populate('userTasks')
+        role=res.userRole
+       } catch (error) {
         res.status(500).json({error:error.message})
-    }
+       }
+
+       if(role === "admin"){
+        try {
+            const us=await users.findOne({userEmail:userEmail})
+            await users.findByIdAndDelete(us._id)
+            res.json({message:"User deleted successfully"})
+        } catch (error) {
+            res.status(500).json({error:error.message})
+        }
+       }
+       else
+    return res.status(404).json({error: "only admin can access"})
+
 }
 
 // User 

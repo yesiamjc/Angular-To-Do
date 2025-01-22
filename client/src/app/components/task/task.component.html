@@ -1,7 +1,17 @@
+<!-- task.component.html -->
 <div class="taskComp">
   @if (!isEditing()) {
     <div class="taskDetails">
-      <p class="taskCompTask">{{ task().myTask }}</p>
+      <div class="taskPart">
+        <input 
+          type="checkbox" 
+          name="taskDone" 
+          class="taskDoneCheck"
+          [checked]="task().myTaskCompleted"
+          (change)="toggleTaskComplete()"
+        >
+        <p class="taskCompTask">{{ task().myTask }}</p>
+      </div>
       <p class="taskCompTime">{{ getFormattedTime() }}</p>
     </div>
     <div class="taskCompButtons">
@@ -10,7 +20,7 @@
     </div>
   } @else {
     <div>
-      <input type="text" [(ngModel)]="task().myTask" class="taskCompInput" />
+      <input type="text" [(ngModel)]="editedTask" class="taskCompInput" />
       <div class="taskCompButtons">
         <button class="taskCompSaveButton" (click)="saveTask()">Save</button>
         <button class="taskCompCancelButton" (click)="toggleEdit()">Cancel</button>

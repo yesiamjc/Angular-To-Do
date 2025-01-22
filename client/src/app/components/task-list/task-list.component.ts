@@ -34,14 +34,17 @@ export class TaskListComponent implements OnInit {
 
   deleteTask(id: string): void {
     this.taskService.deleteTask(id).subscribe(() => {
-      this.tasks.set(this.tasks().filter(task => task.id !== id));
+      // Change task.id to task._id
+      this.tasks.set(this.tasks().filter(task => task._id !== id));
     });
   }
 
   updateTask(task: Task): void {
-    if (task.id) {
-      this.taskService.updateTask(task.id, task).subscribe(updatedTask => {
-        const index = this.tasks().findIndex(t => t.id === task.id);
+    // Change task.id to task._id
+    if (task._id) {
+      this.taskService.updateTask(task._id, task).subscribe(updatedTask => {
+        // Change t.id to t._id
+        const index = this.tasks().findIndex(t => t._id === task._id);
         if (index !== -1) {
           const updatedTasks = [...this.tasks()];
           updatedTasks[index] = updatedTask;
@@ -50,6 +53,8 @@ export class TaskListComponent implements OnInit {
       });
     }
   }
+
+  
 
   onTaskAdded(newTask: Task): void {
     this.tasks.set([...this.tasks(), newTask]);
