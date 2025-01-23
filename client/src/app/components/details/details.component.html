@@ -1,1 +1,13 @@
-<p>details works!</p>
+<div class="user-details">
+    <h2>User Details</h2>
+    <p>Username: {{ userData.userName }}</p>
+    <p>Email: {{ userData.userEmail }}</p>
+    
+    <h3>Tasks</h3>
+    <div *ngFor="let task of tasks" class="task">
+      {{ task.title }}
+      <div class="taskCompButtons" style="display: none;">
+        <!-- Task completion buttons -->
+      </div>
+    </div>
+  </div>

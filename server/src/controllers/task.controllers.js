@@ -77,7 +77,7 @@ export const deleteTask = async (req, res) => {
     if (task.myTaskUser.toString() !== req.user.id)
       return res.status(403).json({ error: "unauthorized" });
     await users.findByIdAndUpdate(req.user.id, {
-      $pull: { usersTasks: id },
+      $pull: { userTasks: id },
     });
     res.status(200).json({ message: "Data deleted successfully", task });
   } catch (error) {

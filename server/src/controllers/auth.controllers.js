@@ -166,3 +166,29 @@ export const getAllUsers = async (req, res) => {
     else
     return res.status(404).json({error: "only admin can access"})
 };
+
+// admin get user 
+
+export const getMyUser=async(req, res)=>{
+    const id=req.user.id
+    const { userEmail } =req.body
+    let role=""
+
+    try {
+        const res=await users.findOne({_id:id}).populate('userTasks')
+        role=res.userRole
+       } catch (error) {
+        res.status(500).json({error:error.message})
+       }
+    
+    if(role === "admin"){
+        try {
+            const response =await users.findOne({userEmail:userEmail}).populate('userTasks')
+            res.status(200).json(response);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+    else
+    return res.status(404).json({error: "only admin can access"})
+}

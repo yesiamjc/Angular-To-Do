@@ -4,7 +4,8 @@ import {
     signOutUser,
     deleteUser,
     currentUser,
-    getAllUsers
+    getAllUsers,
+    getMyUser
 } from '../controllers/auth.controllers.js'
 import { verifyToken } from '../middlewares/auth.middlewares.js'
 import express from 'express'
@@ -22,5 +23,7 @@ authRoute.delete('/delete', verifyToken, deleteUser)
 authRoute.get('/me', verifyToken, currentUser)
 
 authRoute.get('/allUsers', verifyToken, getAllUsers)
+
+authRoute.get('/getUser', verifyToken, getMyUser)
 
 export default authRoute

@@ -1,18 +1,23 @@
 <div class="dashboard">
-    <h2 class="dashboardHeading">Welcome to admin dashboard 🙏</h2>
-     <div class="dashboardActionItems">
-      <div class="dashboardActionItemsRemove">
-        <input 
+  <h2 class="dashboardHeading">Welcome to admin dashboard 🙏</h2>
+  <div class="dashboardActionItems">
+    <div class="dashboardActionItemsRemove">
+      <input 
         class="dashboardActionItemsRemoveInput" 
         type="text" 
         placeholder="Enter user email to delete" 
-        [(ngModel)]="userEmailToDelete()"
+        [(ngModel)]="userEmailToDelete"
       />
-      <button class="dashboardActionItemsBtn" (click)="deleteUser()">Remove User</button></div>
-      <div class="dashboardActionItemsDetails">
-        <input class="dashboardActionItemsRemoveInput" type="text" placeholder="Enter useremail to view">
-        <button class="dashboardActionItemsBtn">View User</button>
-      </div>
-     </div>
-
+      <button class="dashboardActionItemsBtn" (click)="deleteUser()">Remove User</button>
+    </div>
+    <div class="dashboardActionItemsDetails">
+      <input 
+        class="dashboardActionItemsRemoveInput" 
+        type="text" 
+        placeholder="Enter useremail to view"
+        [(ngModel)]="userEmailToView"
+      />
+      <button class="dashboardActionItemsBtn" (click)="viewUser()">View User</button>
+    </div>
+  </div>
 </div>
