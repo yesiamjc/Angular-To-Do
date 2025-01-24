@@ -4,6 +4,8 @@ import {
     comparePassword
 } from '../utils/auth.utils.js'
 import { users } from '../models/auth.models.js'
+import { tasks } from '../models/task.models.js'
+import { sendCompletionEmail } from '../utils/email.utils.js'
 
 // Sign Up
 
@@ -171,7 +173,7 @@ export const getAllUsers = async (req, res) => {
 
 export const getMyUser=async(req, res)=>{
     const id=req.user.id
-    const { userEmail } =req.body
+    const { userEmail } =req.query
     let role=""
 
     try {
@@ -184,6 +186,8 @@ export const getMyUser=async(req, res)=>{
     if(role === "admin"){
         try {
             const response =await users.findOne({userEmail:userEmail}).populate('userTasks')
+            console.log('User found:', response);
+        console.log('User Tasks:', response.userTasks);
             res.status(200).json(response);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -192,3 +196,55 @@ export const getMyUser=async(req, res)=>{
     else
     return res.status(404).json({error: "only admin can access"})
 }
+
+// Reassign of tasks
+
+export const reassignTask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const adminId = req.user.id;
+
+        const admin = await users.findOne({ _id: adminId });
+        if (!admin || admin.userRole !== "admin") {
+            return res.status(403).json({ error: "Unauthorized: Admin access required" });
+        }
+
+        const task = await tasks.findByIdAndUpdate(
+            taskId, 
+            { myTaskCompleted: false },
+            { new: true }
+        );
+
+        if (!task) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+
+        res.status(200).json(task);
+    } catch (error) {
+        console.error('Reassign Task Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const markTaskComplete = async (req, res) => {
+    try {
+      const { taskId } = req.body;
+      console.log(taskId)
+  
+      const task = await tasks.findById(taskId);
+      if (!task) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
+  
+      task.completed = true;
+      await task.save();
+  
+      await sendCompletionEmail(task);
+  
+      res.status(200).json({ message: 'Task marked as complete and email sent' });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error marking task as complete', error });
+    }
+};

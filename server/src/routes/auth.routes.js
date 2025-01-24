@@ -5,7 +5,9 @@ import {
     deleteUser,
     currentUser,
     getAllUsers,
-    getMyUser
+    getMyUser,
+    reassignTask,
+    markTaskComplete
 } from '../controllers/auth.controllers.js'
 import { verifyToken } from '../middlewares/auth.middlewares.js'
 import express from 'express'
@@ -25,5 +27,9 @@ authRoute.get('/me', verifyToken, currentUser)
 authRoute.get('/allUsers', verifyToken, getAllUsers)
 
 authRoute.get('/getUser', verifyToken, getMyUser)
+
+authRoute.patch('/:taskId/reassign', verifyToken, reassignTask);
+
+authRoute.patch('/send-email', verifyToken, markTaskComplete);
 
 export default authRoute

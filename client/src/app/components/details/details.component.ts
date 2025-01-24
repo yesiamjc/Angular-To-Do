@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -14,6 +15,8 @@ import { CommonModule } from '@angular/common';
 export class DetailsComponent implements OnInit {
   userData: any = null;
   tasks: any[] = [];
+  errorMessage: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private router: Router,
@@ -27,6 +30,7 @@ export class DetailsComponent implements OnInit {
 
     if (navigationData && navigationData['userData']) {
       this.userData = navigationData['userData'];
+      this.checkUserRole();
       this.fetchUserTasks();
     } else {
       // If no data in navigation state, check if we have a stored email in local storage
@@ -39,22 +43,29 @@ export class DetailsComponent implements OnInit {
     }
   }
 
+  checkUserRole() {
+    // Assuming user role is part of userData
+    this.isAdmin = this.userData?.userRole === 'admin';
+  }
+
   fetchUserByEmail(email: string) {
     this.http.get(`${environment.apiUrl}/users/getUser`, {
       params: { userEmail: email },
       withCredentials: true
-    }).subscribe(
-      (user: any) => {
+    }).pipe(
+      catchError(this.handleError)
+    ).subscribe({
+      next: (user: any) => {
         this.userData = user;
+        this.checkUserRole();
         this.tasks = user.userTasks || [];
-        // Clear the stored email after successful fetch
         localStorage.removeItem('viewUserEmail');
       },
-      error => {
-        console.error('Error fetching user:', error);
+      error: (error) => {
+        this.errorMessage = error;
         this.router.navigate(['/dashboard']);
       }
-    );
+    });
   }
 
   fetchUserTasks() {
@@ -62,15 +73,67 @@ export class DetailsComponent implements OnInit {
       this.http.get(`${environment.apiUrl}/users/getUser`, {
         params: { userEmail: this.userData.userEmail },
         withCredentials: true
-      }).subscribe(
-        (response: any) => {
+      }).pipe(
+        catchError(this.handleError)
+      ).subscribe({
+        next: (response: any) => {
           this.tasks = response.userTasks || [];
         },
-        error => {
-          console.error('Error fetching tasks:', error);
+        error: (error) => {
+          this.errorMessage = error;
           this.router.navigate(['/dashboard']);
         }
-      );
+      });
     }
+  }
+
+  reassignTask(taskId: string) {
+    this.http.patch(`${environment.apiUrl}/users/${taskId}/reassign`, {}, {
+      withCredentials: true,
+      observe: 'response' // Add this to get full response
+    }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Full error:', error);
+        
+        // More detailed error handling
+        if (error.status === 403) {
+          this.errorMessage = 'Unauthorized: Admin access required';
+        } else if (error.status === 404) {
+          this.errorMessage = 'Task not found';
+        } else {
+          this.errorMessage = error.message || 'An unexpected error occurred';
+        }
+        
+        return throwError(() => error);
+      })
+    ).subscribe({
+      next: (response: any) => {
+        console.log('Task reassigned successfully', response.body);
+        
+        // Update local tasks list
+        const taskIndex = this.tasks.findIndex(t => t._id === taskId);
+        if (taskIndex !== -1) {
+          this.tasks[taskIndex] = response.body;
+        }
+        
+        this.errorMessage = ''; // Clear any previous errors
+      },
+      error: (error) => {
+        console.error('Reassign task error:', error);
+      }
+    });
+  }
+  // Error handling method
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

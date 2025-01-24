@@ -1,13 +1,17 @@
-<div class="user-details">
-    <h2>User Details</h2>
-    <p>Username: {{ userData.userName }}</p>
-    <p>Email: {{ userData.userEmail }}</p>
-    
-    <h3>Tasks</h3>
-    <div *ngFor="let task of tasks" class="task">
-      {{ task.title }}
-      <div class="taskCompButtons" style="display: none;">
-        <!-- Task completion buttons -->
-      </div>
+<div class="userDetails">
+  <h2 class="userDetailsHeading">User Details</h2>
+  <p class="userDetailsPara">Username: {{ userData.userName }}</p>
+  <p class="userDetailsPara">Email: {{ userData.userEmail }}</p>
+  
+  <h3 class="userDetailsHeading">Tasks</h3>
+  @for (task of tasks; track task._id) {
+    <div class="task">
+      {{ task.myTask }} 
+      @if (task.myTaskCompleted) {
+        <span class="taskCompButtons">
+          <button class="taskCompButtonsBtn" (click)="reassignTask(task._id)">Reassign</button>
+        </span>
+      }
     </div>
-  </div>
+  }
+</div>

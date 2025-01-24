@@ -47,6 +47,10 @@ export class ServiceService {
       myTask: task.myTask,
       myTaskCompleted: task.myTaskCompleted
     };
+
+    if (task.myTaskCompleted) {
+      this.sendCompletionEmail(id);
+    }
   
     return this.http.patch<Task>(`${this.apiUrl}/${id}`, updateData, { 
       withCredentials: true 
@@ -66,5 +70,14 @@ deleteTask(id: string): Observable<void> {
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error);
     return throwError(() => new Error('Something went wrong; please try again later.'));
+  }
+
+  sendCompletionEmail(taskId: string) {
+    this.http.post(`${this.apiUrl}/send-email`, { taskId }, { 
+      withCredentials: true 
+    }).subscribe({
+      next: () => console.log('Email sent successfully'),
+      error: (error) => console.error('Error sending email:', error)
+    });
   }
 }
