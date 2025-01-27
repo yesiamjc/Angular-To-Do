@@ -228,23 +228,31 @@ export const reassignTask = async (req, res) => {
 
 export const markTaskComplete = async (req, res) => {
     try {
-      const { taskId } = req.body;
-      console.log(taskId)
-  
-      const task = await tasks.findById(taskId);
-      if (!task) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-  
-      task.completed = true;
-      await task.save();
-  
-      await sendCompletionEmail(task);
-  
-      res.status(200).json({ message: 'Task marked as complete and email sent' });
-  
+        const { id } = req.body;
+        
+        if (!id) {
+            return res.status(400).json({ error: "Task ID is required" });
+        }
+
+        const task = await tasks.findById(id);
+        if (!task) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+
+        try {
+            await sendCompletionEmail(task);
+            return res.status(200).json({ 
+                message: "Completion email sent successfully"
+            });
+        } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            return res.status(500).json({ 
+                error: "Failed to send completion email",
+                details: emailError.message 
+            });
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error marking task as complete', error });
+        console.error('Task completion error:', error);
+        return res.status(500).json({ error: error.message });
     }
 };

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 export interface Task {
   _id?: string;  
@@ -47,17 +47,24 @@ export class ServiceService {
       myTask: task.myTask,
       myTaskCompleted: task.myTaskCompleted
     };
-
-    if (task.myTaskCompleted) {
-      this.sendCompletionEmail(id);
-    }
   
     return this.http.patch<Task>(`${this.apiUrl}/${id}`, updateData, { 
       withCredentials: true 
     }).pipe(
+      tap(updatedTask => {
+        // Only send email if task is being marked as complete
+        if (task.myTaskCompleted) {
+          this.http.patch(`${this.apiUrl}/send-email`, { id }, { 
+            withCredentials: true 
+          }).subscribe({
+            error: (error) => console.error('Error sending completion email:', error)
+          });
+        }
+      }),
       catchError(this.handleError)
     );
   }
+
 
 deleteTask(id: string): Observable<void> {
   return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true }).pipe(
@@ -73,11 +80,13 @@ deleteTask(id: string): Observable<void> {
   }
 
   sendCompletionEmail(taskId: string) {
-    this.http.post(`${this.apiUrl}/send-email`, { taskId }, { 
+    this.http.patch(`${this.apiUrl}/send-email`, { id: taskId }, { 
       withCredentials: true 
-    }).subscribe({
-      next: () => console.log('Email sent successfully'),
-      error: (error) => console.error('Error sending email:', error)
-    });
+    }).pipe(
+      catchError(error => {
+        console.error('Error sending email:', error);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 }
